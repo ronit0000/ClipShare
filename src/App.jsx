@@ -1,10 +1,13 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
+// src/App.jsx
+import UploadPage from './UploadPage';
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-)
+function App() {
+  return (
+    <div>
+      <h1 style={{ textAlign: 'center' }}>ClipShare</h1>
+      <UploadPage />
+    </div>
+  );
+}
+
+export default App;
