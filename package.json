@@ -2,7 +2,7 @@
   "name": "clipshare",
   "private": true,
   "version": "0.0.0",
-  "homepage": "/ClipShare/",
+  "homepage": "https://ronit0000.github.io/ClipShare",
   "type": "module",
   "scripts": {
     "dev": "vite",
