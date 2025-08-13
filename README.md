@@ -1,12 +1,57 @@
-# React + Vite
+# 📋 ClipShare
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**ClipShare** is an online clipboard tool that allows users to instantly share files between devices using a unique share code. Simply upload your file, get a unique code, and let the recipient download it by entering that code. No sign-ups, no complicated setup — just quick and seamless file sharing.
 
-Currently, two official plugins are available:
+🌐 **Live Demo:** [ClipShare](https://ronit0000.github.io/ClipShare/)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## Expanding the ESLint configuration
+## 🚀 Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **Instant File Sharing** – Upload your file and get a unique code for sharing.
+- **Easy Retrieval** – Enter the code to download the file on any device.
+- **All Device Friendly** – Works perfectly on desktop, tablet, and mobile.
+- **No Login Required** – Start sharing instantly without account creation.
+- **Secure & Private** – Share codes expire after the file is retrieved (if implemented).
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend:** React, Vite
+- **Styling:** CSS (Responsive Design)
+- **Backend / File Handling:** JavaScript,SupaBase
+- **Hosting:** GitHub Pages
+
+---
+
+## 📌 Usage
+
+1. Upload File – Click on the "Upload" button and select a file.
+2. Get Code – Once uploaded, you’ll receive a unique share code.
+3. Share Code – Send the code to the recipient.
+4. Download – The recipient enters the code and downloads the file.
+
+---
+
+## 📥 Installation & Setup
+
+If you want to run ClipShare locally:
+
+```bash
+# Clone the repository
+git clone https://github.com/ronit0000/ClipShare.git
+
+# Navigate to the project directory
+cd ClipShare
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+---
+
+
+
