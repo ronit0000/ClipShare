@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+### 📚 Core Documentation
 1. [Project Overview](./01-project-overview.md)
 2. [Getting Started](./02-getting-started.md)
 3. [Architecture & Design](./03-architecture.md)
@@ -12,6 +13,12 @@
 8. [Feature Roadmap](./08-roadmap.md)
 9. [Contributing Guidelines](./09-contributing.md)
 10. [Changelog](./10-changelog.md)
+
+### 📊 Project Tracking & Management
+11. [Project Tracker](./PROJECT-TRACKER.md) - High-level project status and metrics
+12. [Task Tracker](./TASK-TRACKER.md) - Sprint planning and daily task management
+13. [Feature Status](./FEATURE-STATUS.md) - Detailed feature implementation tracking
+14. [Development Journal](./DEVELOPMENT-JOURNAL.md) - Daily development log and insights
 
 ---
 
