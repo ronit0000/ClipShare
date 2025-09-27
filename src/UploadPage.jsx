@@ -1,7 +1,10 @@
 import React, { useState, useCallback, useEffect } from "react";
-import { CloudArrowUpIcon } from "@heroicons/react/24/solid";
+import { CloudArrowUpIcon, LockClosedIcon, ClockIcon } from "@heroicons/react/24/solid";
 import { supabase } from "./supabaseClient";
 import { nanoid } from "nanoid";
+import { hashPassword, validatePasswordStrength } from "./utils/passwordUtils";
+import { EXPIRY_OPTIONS, calculateExpiryTime } from "./utils/expirationUtils";
+import PasswordStrengthIndicator from "./components/PasswordStrengthIndicator";
 
 const UploadPage = () => {
   const [files, setFiles] = useState([]);
@@ -10,12 +13,21 @@ const UploadPage = () => {
   const [code, setCode] = useState(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  
+  // New state for password protection and expiration
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordEnabled, setPasswordEnabled] = useState(false);
+  const [expiryHours, setExpiryHours] = useState(24);
+  const [passwordError, setPasswordError] = useState("");
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const onFilesAdded = (event) => {
     setFiles(Array.from(event.target.files));
     setPreviews([]); // reset previews
     setCode(null);
     setError("");
+    setPasswordError("");
   };
 
   const onDrop = useCallback((event) => {
@@ -24,6 +36,7 @@ const UploadPage = () => {
     setPreviews([]);
     setCode(null);
     setError("");
+    setPasswordError("");
   }, []);
 
   const onDragOver = (event) => event.preventDefault();
@@ -37,11 +50,36 @@ const UploadPage = () => {
     return () => filePreviews.forEach(url => URL.revokeObjectURL(url));
   }, [files]);
 
+  // Validate password before upload
+  const validatePassword = () => {
+    if (!passwordEnabled) return true;
+    
+    const validation = validatePasswordStrength(password);
+    if (!validation.isValid) {
+      setPasswordError(validation.message);
+      return false;
+    }
+    
+    if (password !== confirmPassword) {
+      setPasswordError("Passwords do not match");
+      return false;
+    }
+    
+    setPasswordError("");
+    return true;
+  };
+
   // Upload logic
   const handleUpload = async () => {
+    if (!validatePassword()) {
+      return;
+    }
+
     setUploading(true);
     setUploadProgress(0);
     setError("");
+    setPasswordError("");
+    
     const uploadCode = nanoid(8);
     let uploadedFiles = [];
 
@@ -68,11 +106,30 @@ const UploadPage = () => {
       setUploadProgress(Math.round(((i + 1) / files.length) * 100));
     }
 
-    // Store in database
+    // Hash password if enabled
+    let passwordHash = null;
+    if (passwordEnabled && password.trim()) {
+      try {
+        passwordHash = await hashPassword(password);
+      } catch (error) {
+        setError("Failed to secure password. Please try again.");
+        setUploading(false);
+        return;
+      }
+    }
+
+    // Calculate expiration time
+    const expiresAt = calculateExpiryTime(expiryHours);
+
+    // Store in database with password and expiration
     const { error: dbError } = await supabase.from("uploads").insert([{
       code: uploadCode,
-      files: uploadedFiles
+      files: uploadedFiles,
+      password_hash: passwordHash,
+      expiry_hours: expiryHours,
+      expires_at: expiresAt
     }]);
+    
     if (dbError) {
       setError(`Saving code failed: ${dbError.message}`);
       setUploading(false);
@@ -161,6 +218,96 @@ const UploadPage = () => {
         )}
         {error && <div className="text-red-400 mt-4">{error}</div>}
 
+        {/* Advanced Options Toggle */}
+        <button
+          type="button"
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className="flex items-center justify-center mx-auto mt-6 px-4 py-2 bg-gray-700 hover:bg-gray-600 rounded-lg text-white text-sm font-medium transition"
+        >
+          <ClockIcon className="w-4 h-4 mr-2" />
+          Advanced Options
+          <span className="ml-2">{showAdvanced ? '▼' : '▶'}</span>
+        </button>
+
+        {/* Advanced Options Panel */}
+        {showAdvanced && (
+          <div className="mt-4 bg-black/30 rounded-lg p-6 text-left space-y-4">
+            {/* Expiration Settings */}
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">
+                <ClockIcon className="inline w-4 h-4 mr-1" />
+                File Expiration
+              </label>
+              <select
+                value={expiryHours}
+                onChange={(e) => setExpiryHours(parseInt(e.target.value))}
+                className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                {EXPIRY_OPTIONS.map(option => (
+                  <option key={option.value} value={option.value}>
+                    {option.label} - {option.description}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Password Protection Toggle */}
+            <div>
+              <label className="flex items-center text-sm font-medium text-white mb-2">
+                <input
+                  type="checkbox"
+                  checked={passwordEnabled}
+                  onChange={(e) => {
+                    setPasswordEnabled(e.target.checked);
+                    if (!e.target.checked) {
+                      setPassword("");
+                      setConfirmPassword("");
+                      setPasswordError("");
+                    }
+                  }}
+                  className="mr-2 w-4 h-4 text-blue-600 bg-gray-800 border-gray-600 rounded focus:ring-blue-500"
+                />
+                <LockClosedIcon className="w-4 h-4 mr-1" />
+                Password Protection
+              </label>
+            </div>
+
+            {/* Password Fields */}
+            {passwordEnabled && (
+              <div className="space-y-3 pl-6 border-l-2 border-blue-500">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Password (min. 6 characters)
+                  </label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="Enter password"
+                    className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                  <PasswordStrengthIndicator password={password} className="mt-2" />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-1">
+                    Confirm Password
+                  </label>
+                  <input
+                    type="password"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
+                    placeholder="Confirm password"
+                    className="w-full px-3 py-2 bg-gray-800 border border-gray-600 rounded-md text-white placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+                {passwordError && (
+                  <div className="text-red-400 text-sm">{passwordError}</div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* Upload Button */}
         <button
           className="block mx-auto mt-6 px-6 py-3 bg-green-600 hover:bg-green-700 rounded-lg text-white font-bold shadow-lg transition disabled:opacity-60"
@@ -176,8 +323,22 @@ const UploadPage = () => {
               Share this code or link:
             </h3>
             <div className="text-2xl text-center font-mono text-white tracking-widest mb-2">{code}</div>
-            <div className="text-gray-300 text-center break-all">
+            <div className="text-gray-300 text-center break-all mb-3">
               {window.location.origin}/receive?code={code}
+            </div>
+            
+            {/* Upload Details */}
+            <div className="text-sm text-gray-400 text-center space-y-1 border-t border-gray-600 pt-3">
+              <div className="flex items-center justify-center">
+                <ClockIcon className="w-4 h-4 mr-1" />
+                Expires in {EXPIRY_OPTIONS.find(opt => opt.value === expiryHours)?.label || `${expiryHours}h`}
+              </div>
+              {passwordEnabled && (
+                <div className="flex items-center justify-center text-yellow-400">
+                  <LockClosedIcon className="w-4 h-4 mr-1" />
+                  Password protected
+                </div>
+              )}
             </div>
           </div>
         )}
