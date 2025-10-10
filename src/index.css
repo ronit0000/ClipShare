@@ -1,7 +1,93 @@
+@import url('https://fonts.googleapis.com/css2?family=Iceland&display=swap');
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
+/* CSS variables for enhanced theming */
+:root {
+  --background: #111827;
+  --foreground: #f9fafb;
+  --card: #1f2937;
+  --card-foreground: #f9fafb;
+  --primary: #3b82f6;
+  --primary-foreground: #ffffff;
+  --secondary: #374151;
+  --secondary-foreground: #f9fafb;
+  --muted: #374151;
+  --muted-foreground: #9ca3af;
+  --accent: #374151;
+  --accent-foreground: #f9fafb;
+  --border: rgba(255, 255, 255, 0.1);
+  --input: rgba(255, 255, 255, 0.15);
+  --ring: #6b7280;
+}
+
 body {
-  @apply bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen font-sans;
+  @apply bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen;
+  font-family: 'Iceland', sans-serif;
+}
+
+/* Apply Iceland to all text elements */
+h1, h2, h3, h4, h5, h6, p, span, div {
+  font-family: 'Iceland', sans-serif;
+}
+
+/* Logo specific sizing */
+.logo-size {
+  font-size: 24px !important; /* Smaller for mobile */
+  line-height: 1.1 !important;
+}
+
+/* Custom heading sizes with responsive design */
+h1 {
+  font-size: 48px; /* Mobile first */
+  line-height: 1.1;
+}
+
+.text-logo {
+  font-size: 24px; /* Mobile first - smaller for mobile */
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: 36px; /* Mobile first */
+  line-height: 1.2;
+}
+
+h3 {
+  font-size: 24px; /* Mobile first */
+  line-height: 1.3;
+}
+
+h4 {
+  font-size: 18px; /* Mobile first */
+  line-height: 1.4;
+}
+
+/* Desktop sizes */
+@media (min-width: 768px) {
+  .logo-size {
+    font-size: 48px !important; /* Reduced from 64px */
+    line-height: 1.1 !important;
+  }
+  
+  h1 {
+    font-size: 80px;
+  }
+  
+  .text-logo {
+    font-size: 48px; /* Reduced from 64px */
+  }
+  
+  h2 {
+    font-size: 56px;
+  }
+  
+  h3 {
+    font-size: 32px;
+  }
+  
+  h4 {
+    font-size: 20px;
+  }
 }

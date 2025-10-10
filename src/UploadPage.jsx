@@ -144,12 +144,12 @@ const UploadPage = () => {
     <div>
       {/* Intro Block */}
       <div className="bg-white/10 border border-white/20 rounded-xl p-6 mb-8 text-left max-w-xl mx-auto shadow">
-        <h2 className="text-xl font-bold text-white mb-2">Introduction</h2>
-        <p className="text-gray-200 mb-4">
+        <h2 className="text-h2 font-bold text-white mb-2 font-iceland">Introduction</h2>
+        <p className="text-gray-200 mb-4 font-iceland">
         Clip Share is an innovative solution that empowers users to seamlessly transfer files between multiple devices, eliminating the hassle and limitations of traditional methods.
         </p>
-        <h3 className="text-lg font-bold text-white mb-2">How to use:</h3>
-        <ol className="list-decimal list-inside space-y-1 text-gray-200">
+        <h3 className="text-h3 font-bold text-white mb-2 font-iceland">How to use:</h3>
+        <ol className="list-decimal list-inside space-y-1 text-gray-200 font-iceland">
           <li>Choose a file that you want to copy to another device by uploading the file.</li>
           <li>Send your file to Online Clipboard by clicking the following button.</li>
           <li>At the other device, retrieve your text or file from Online Clipboard by entering your code.</li>
@@ -163,8 +163,8 @@ const UploadPage = () => {
         className="bg-white/10 backdrop-blur-lg rounded-3xl border-2 border-dashed border-gray-300 p-10 w-full max-w-xl text-center shadow-lg hover:border-blue-500 transition mx-auto"
       >
         <CloudArrowUpIcon className="mx-auto h-16 w-16 text-blue-400" />
-        <h2 className="text-2xl font-bold mt-4 text-white">Upload Your Files</h2>
-        <p className="text-gray-300 mt-2">
+        <h2 className="text-h2 font-bold mt-4 text-white font-iceland">Upload Your Files</h2>
+        <p className="text-gray-300 mt-2 font-iceland">
           Drag & drop files here, or click below to select
         </p>
 
@@ -178,7 +178,7 @@ const UploadPage = () => {
         />
         <label
           htmlFor="fileElem"
-          className="inline-block mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium shadow-lg cursor-pointer transition"
+          className="inline-block mt-6 px-6 py-3 bg-blue-600 hover:bg-blue-700 rounded-lg text-white font-medium shadow-lg cursor-pointer transition font-iceland"
         >
           Select Files
         </label>

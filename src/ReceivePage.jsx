@@ -103,8 +103,8 @@ const ReceivePage = () => {
     <div className="max-w-xl mx-auto">
       {/* Glassy header */}
       <div className="bg-white/10 border border-white/20 rounded-xl p-6 mb-8 text-left shadow">
-        <h2 className="text-xl font-bold text-white mb-2">Receive Files</h2>
-        <p className="text-gray-200">
+        <h2 className="text-h2 font-bold text-white mb-2 font-iceland">Receive Files</h2>
+        <p className="text-gray-200 font-iceland">
           Enter your unique code to instantly download files sent from another device.
         </p>
       </div>
@@ -115,7 +115,7 @@ const ReceivePage = () => {
           onSubmit={handleSubmit}
           className="bg-white/10 backdrop-blur-lg rounded-3xl border-2 border-dashed border-gray-300 p-10 text-center shadow-lg mx-auto"
         >
-          <label htmlFor="receive-code" className="block mb-4 text-lg font-semibold text-white">
+          <label htmlFor="receive-code" className="block mb-4 text-h4 font-semibold text-white font-iceland">
             Enter code
           </label>
           <input
@@ -123,7 +123,7 @@ const ReceivePage = () => {
             type="text"
             value={code}
             onChange={(e) => setCode(e.target.value)}
-            className="w-full px-4 py-3 rounded bg-gray-900/60 border border-gray-600 text-white focus:outline-none focus:border-blue-400 mb-6"
+            className="w-full px-4 py-3 rounded bg-gray-900/60 border border-gray-600 text-white focus:outline-none focus:border-blue-400 mb-6 font-iceland"
             placeholder="Example: 7Y6X2A"
             required
           />
