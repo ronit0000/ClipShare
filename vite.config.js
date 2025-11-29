@@ -4,7 +4,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/ClipShare/', // must match repo name exactly
+  base: './', // use relative paths so GitHub Pages / custom domains find assets
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
